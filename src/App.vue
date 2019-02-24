@@ -58,7 +58,7 @@ export default {
     search() {
       this.loading = true;
       this.axios
-        .post("/profile/" + this.handle + ".json")
+        .post("/profile/" + this.handle)
         .then(response => {
           this.response = response;
           this.loading = false;
