@@ -39,10 +39,12 @@ class Profile(Resource):
         else:
             return "Account not found", 404
 
+@app.route('/')
+def index():
+    return send_from_directory("./dist", "index.html")
+    
 @app.route('/<path:filename>')
 def serve(filename):
-    if filename == "":
-        return send_from_directory("./dist", "index.html")
     return send_from_directory("./dist", filename)
 
 api.add_resource(Profile, "/profile/<string:handle>")
