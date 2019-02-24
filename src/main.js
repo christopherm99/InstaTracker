@@ -1,7 +1,7 @@
 import Vue from "vue";
 import "./plugins/vuetify";
 import App from "./App.vue";
-import { L, LMap, LTileLayer, LMarker } from "vue2-leaflet";
+import { L, LMap, LTileLayer, LMarker, LPopup, LPolyline } from "vue2-leaflet";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
 import VueAxios from "vue-axios";
@@ -10,6 +10,8 @@ Vue.use(VueAxios, axios);
 Vue.component("l-map", LMap);
 Vue.component("l-tile-layer", LTileLayer);
 Vue.component("l-marker", LMarker);
+Vue.component("l-popup", LPopup);
+Vue.component("l-polyline", LPolyline);
 
 delete L.Icon.Default.prototype._getIconUrl;
 
