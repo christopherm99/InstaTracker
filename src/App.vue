@@ -29,7 +29,7 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <Map v-if="!dialog" :posts="posts"></Map>
+      <Map v-if="!dialog" :posts="posts" :line="line"></Map>
     </v-app>
   </div>
 </template>
@@ -45,6 +45,7 @@ export default {
       dialog: true,
       handle: "",
       posts: [],
+      line: [],
       error: "",
       selected: "",
       loading: false,
@@ -73,6 +74,7 @@ export default {
               id: e.id,
               date: e.date
             });
+            this.line.push(L.latLng(e.latitude, e.longitude));
           });
         })
         .catch(reason => {

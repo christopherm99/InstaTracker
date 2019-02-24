@@ -14,6 +14,7 @@
             </div>
           </a>
         </l-popup>
+        <l-polyline :latLngs="line"></l-polyline>
       </l-marker>
     </l-map>
   </div>
@@ -36,7 +37,7 @@ export default {
       }
     };
   },
-  props: ["posts"],
+  props: ["posts", "line"],
   components: {
     LMap,
     LTileLayer,
