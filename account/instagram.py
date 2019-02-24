@@ -3,15 +3,20 @@ import datetime
 import subprocess
 import os
 from pathlib import Path
+from geopy.geocoders import MapBox
 
-def get_coordinates(query_str):
-    return 0.0, 0.0
+def get_address_and_coordinates(query_str):
+    geolocator = MapBox("pk.eyJ1IjoiY2FkMzE0IiwiYSI6ImNqc2ozaGQwYTF2bGk0OXM3Y3ltczI2aTYifQ.Txtofo3qGGSnep5GRu-vQw")
+    print(query_str)
+    location = geolocator.geocode(query_str)
+    print(location)
+    return str(location), location.latitude, location.longitude
 
 def load_acc():
     data = json.load(open(os.path.join(os.path.dirname(__file__), Path("user_info.json"))))
-    return data["username"], data["password"]
+    return data["username"], data["password"], data["token"]
 
-login, pw = load_acc()
+login, pw, token = load_acc()
 
 def get_config(user, directory):
     return ['instagram-scraper', user, '-u', login, '-p', pw, '-d', 'data', '--media-metadata', '--include-location', '--media-type', 'none', '--quiet']
@@ -25,6 +30,7 @@ def process_data(p):
         return "Account not found", False
     location_url_str = "https://www.instagram.com/explore/locations/{}/{}" # id, slug
     post_url_str = "https://www.instagram.com/p/{}"
+    location_query_str = "{}, {} {}. {}"
     location_str = "{}, {}. {}"
 
     data = json.load(open(p))
@@ -39,11 +45,11 @@ def process_data(p):
         if post['location']['address_json']:
             addr_json = json.loads(post['location']['address_json'])
             post_data["location_name"] = location_str.format(post['location']['name'], addr_json['city_name'], addr_json['zip_code'])
-            post_data["location_query"] = location_str.format(addr_json['street_address'], addr_json['city_name'], addr_json['zip_code']) 
+            post_data["location_query"] = location_query_str.format(addr_json['street_address'], addr_json['city_name'], post["location"]["name"], addr_json['zip_code']) 
         else: 
             post_data["location_name"] = post['location']['name']
             post_data["location_query"] = post['location']['name']
-        post_data["latitude"], post_data["longitude"] = get_coordinates(post_data["location_query"])
+        post_data["location_name"], post_data["latitude"], post_data["longitude"] = get_address_and_coordinates(post_data["location_query"])
         post_data["img_url"] = post['display_url']
         post_data["url"] = post_url_str.format(post['shortcode'])
         edges = post['edge_media_to_caption']['edges']
