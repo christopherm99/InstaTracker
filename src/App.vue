@@ -70,7 +70,8 @@ export default {
               location: L.latLng(e.latitude, e.longitude),
               comment: e.text,
               img: e.img_url,
-              id: e.id
+              id: e.id,
+              date: e.date
             });
           });
         })

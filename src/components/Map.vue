@@ -7,6 +7,9 @@
           <a :href="'https://www.instagram.com/p/' + post.id">
             <img class="image" :src="post.img" />
             <div>
+              {{ post.date }}
+            </div>
+            <div>
               {{ post.comment }}
             </div>
           </a>
@@ -51,5 +54,7 @@ export default {
 <style lang="stylus">
 .image {
   width: 200px;
+  text-decoration: none;
+  color: black;
 }
 </style>
