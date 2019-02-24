@@ -17,7 +17,7 @@
             <v-alert :value="error" type="error">
               {{ error }}
             </v-alert>
-            <v-form>
+            <v-form @submit="search()">
               <v-text-field label="Instagram Handle" v-model="handle" />
             </v-form>
           </v-card-text>
