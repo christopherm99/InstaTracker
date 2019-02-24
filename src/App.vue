@@ -1,21 +1,16 @@
 <template>
   <div id="app">
-    <p>Hello, {{ name }}</p>
+    <Map></Map>
   </div>
 </template>
 
 <script>
+import Map from "./components/Map.vue";
+
 export default {
   name: "app",
-  data() {
-    return {
-      name: "Chris"
-    };
-  },
-  methods: {
-    getPlace() {
-      this.name = "Alex";
-    }
+  components: {
+    Map
   }
 };
 </script>
