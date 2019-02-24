@@ -13,6 +13,8 @@ Vue.component("l-marker", LMarker);
 Vue.component("l-popup", LPopup);
 Vue.component("l-polyline", LPolyline);
 
+Vue.config.devtools = true;
+
 delete L.Icon.Default.prototype._getIconUrl;
 
 L.Icon.Default.mergeOptions({
