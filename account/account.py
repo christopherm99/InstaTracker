@@ -5,6 +5,7 @@ class Account:
     def __init__(self, handle):
         self.handle = handle
         self.posts, self.ok = self.populate()
+        self.posts.sort(key=lambda x: x["timestamp"])
     
     def populate(self):
         p = Path("data/{}.json".format(self.handle))
