@@ -17,10 +17,12 @@ def get_config(user, directory):
     return ['instagram-scraper', user, '-u', login, '-p', pw, '-d', 'data', '--media-metadata', '--include-location', '--media-type', 'none', '--quiet']
 
 def scrape(user, directory):
-    subprocess.check_output(get_config(user, directory)) # block until done
+    output = subprocess.check_output(get_config(user, directory)) # block until done
     return process_data(Path(directory))
 
 def process_data(p):
+    if not p.exists():
+        return "Account not found", False
     location_url_str = "https://www.instagram.com/explore/locations/{}/{}" # id, slug
     post_url_str = "https://www.instagram.com/p/{}"
     location_str = "{}, {}. {}"
@@ -34,11 +36,14 @@ def process_data(p):
         if post['location'] is None: 
             continue
         post_data["location_url"] = location_url_str.format(post['location']['id'], post['location']['slug']) if post['location']['has_public_page'] else None
-        addr_json = json.loads(post['location']['address_json'])
-        post_data["location_name"] = location_str.format(post['location']['name'], addr_json['city_name'], addr_json['zip_code'])
-        post_data["location_query"] = location_str.format(addr_json['street_address'], addr_json['city_name'], addr_json['zip_code'])
+        if post['location']['address_json']:
+            addr_json = json.loads(post['location']['address_json'])
+            post_data["location_name"] = location_str.format(post['location']['name'], addr_json['city_name'], addr_json['zip_code'])
+            post_data["location_query"] = location_str.format(addr_json['street_address'], addr_json['city_name'], addr_json['zip_code']) 
+        else: 
+            post_data["location_name"] = post['location']['name']
+            post_data["location_query"] = post['location']['name']
         post_data["latitude"], post_data["longitude"] = get_coordinates(post_data["location_query"])
-
         post_data["img_url"] = post['display_url']
         post_data["url"] = post_url_str.format(post['shortcode'])
         edges = post['edge_media_to_caption']['edges']
@@ -49,4 +54,4 @@ def process_data(p):
         post_data["id"] = post['shortcode']
         ret_data.append(post_data)
     
-    return ret_data
+    return ret_data, True

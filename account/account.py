@@ -4,14 +4,20 @@ from pathlib import Path
 class Account:
     def __init__(self, handle):
         self.handle = handle
-        self.posts = self.populate()
+        try:
+            self.posts = self.populate()
+        except Exception:
+            raise Exception("Account not found")
     
     def populate(self):
         p = Path("data/{}.json".format(self.handle))
         if p.exists():
             return process_data(p)
         else:
-            return scrape(self.handle, p)
+            res, ok = scrape(self.handle, p)
+            if not ok:
+                raise Exception("Account not found")
+            return res
 
     @property
     def url(self):
