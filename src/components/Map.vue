@@ -4,7 +4,7 @@
       <l-tile-layer :url="url" :attribution="attribution" />
       <l-marker v-for="post in posts" :key="post.id" :lat-lng="post.location">
         <l-popup @click="goToPost(post)">
-          <a class="popups" :href="'https://www.instagram.com/p/' + post.id">
+          <a class="popup" :href="'https://www.instagram.com/p/' + post.id">
             <img class="image" :src="post.img" />
             <div>
               {{ post.date }}
