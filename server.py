@@ -17,21 +17,27 @@ class Profile(Resource):
     def post(self, handle):
         if handle in accounts:
             return accounts[handle].to_json(), 200
-        try:
-            accounts[handle] = Account(handle)
+        a = Account(handle)
+        if a.ok:
+            accounts[handle] = a
             return accounts[handle].to_json(), 201
-        except:
-            return [], 404
+        else:
+            return "Account not found", 404
 
     def put(self, handle):
         if handle in accounts:
-            accounts[handle] = Account(handle)
-            return accounts[handle].to_json(), 200
-        try:
-            accounts[handle] = Account(handle)
+            a = Account(handle)
+            if a.ok:
+                accounts[handle] = a
+                return accounts[handle].to_json(), 200
+            else:
+                return "Account not found", 404
+        a = Account(handle)
+        if a.ok:
+            accounts[handle] = a
             return accounts[handle].to_json(), 201
-        except:
-            return [], 404
+        else:
+            return "Account not found", 404
 
 api.add_resource(Profile, "/profile/<string:handle>")
 app.run(debug=True)

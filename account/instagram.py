@@ -7,10 +7,12 @@ from geopy.geocoders import MapBox
 
 def get_address_and_coordinates(query_str):
     geolocator = MapBox("pk.eyJ1IjoiY2FkMzE0IiwiYSI6ImNqc2ozaGQwYTF2bGk0OXM3Y3ltczI2aTYifQ.Txtofo3qGGSnep5GRu-vQw")
-    print(query_str)
     location = geolocator.geocode(query_str)
-    print(location)
-    return str(location), location.latitude, location.longitude
+    
+    if hasattr(location, "longitude"):
+        return str(location), location.latitude, location.longitude
+    else:
+        return str(location), 181, 181
 
 def load_acc():
     data = json.load(open(os.path.join(os.path.dirname(__file__), Path("user_info.json"))))
@@ -19,7 +21,7 @@ def load_acc():
 login, pw, token = load_acc()
 
 def get_config(user, directory):
-    return ['instagram-scraper', user, '-u', login, '-p', pw, '-d', 'data', '--media-metadata', '--include-location', '--media-type', 'none', '--quiet']
+    return ['instagram-scraper', user, '-u', login, '-p', pw, '-d', 'data', '--media-metadata', '--include-location', '--media-type', 'none', '--maximum', '100', '--quiet']
 
 def scrape(user, directory):
     output = subprocess.check_output(get_config(user, directory)) # block until done
@@ -34,7 +36,6 @@ def process_data(p):
     location_str = "{}, {}. {}"
 
     data = json.load(open(p))
-
     ret_data = []
     for post in data:
         post_data = {}
