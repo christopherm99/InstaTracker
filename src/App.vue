@@ -32,6 +32,7 @@
 
 <script>
 import Map from "./components/Map.vue";
+import { L } from "vue2-leaflet";
 
 export default {
   name: "app",
@@ -39,7 +40,7 @@ export default {
     return {
       dialog: true,
       handle: "",
-      posts: undefined,
+      posts: [],
       error: ""
     };
   },
@@ -54,7 +55,15 @@ export default {
         .then(response => {
           this.loading = false;
           this.dialog = false;
-          this.posts = response.data.posts;
+          this.posts = [];
+          response.data.posts.forEach(e => {
+            this.posts.push({
+              location: L.latLng(e.latitude, e.longitude),
+              comment: e.text,
+              img: e.img_url,
+              id: e.id
+            });
+          });
         })
         .catch(reason => {
           this.loading = false;
