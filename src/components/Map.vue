@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { L, LMap, LTileLayer, LMarker, LPopup } from "vue2-leaflet";
+import { L, LMap, LTileLayer, LMarker, LPopup, LPolyline } from "vue2-leaflet";
 
 export default {
   data() {
@@ -42,7 +42,8 @@ export default {
     LMap,
     LTileLayer,
     LMarker,
-    LPopup
+    LPopup,
+    LPolyline
   },
   methods: {
     goToPage(post) {
