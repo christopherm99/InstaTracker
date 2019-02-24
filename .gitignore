@@ -23,5 +23,5 @@ yarn-error.log*
 __pycache__
 .vscode
 *.log
-data/*
+data/*.json
 user_info.json
