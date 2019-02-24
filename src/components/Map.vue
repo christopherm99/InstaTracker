@@ -5,7 +5,7 @@
       <l-marker v-for="post in posts" :key="post.id" :lat-lng="post.location">
         <l-popup @click="goToPost(post)">
           <a :href="'https://www.instagram.com/p/' + post.id">
-            <img :src="post.img" />
+            <img class="image" :src="post.img" />
             <div>
               {{ post.comment }}
             </div>
@@ -24,7 +24,8 @@ export default {
     return {
       zoom: 5,
       center: L.latLng(39.8333333, -98.585522),
-      url: "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
+      url:
+        "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
       attribution:
         '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       mapOptions: {
@@ -47,4 +48,8 @@ export default {
 };
 </script>
 
-<style lang="stylus"></style>
+<style lang="stylus">
+.image {
+  width: 200px;
+}
+</style>

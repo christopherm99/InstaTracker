@@ -3,8 +3,12 @@
     <v-app>
       <v-toolbar dark>
         <v-toolbar-title>InstaTracker</v-toolbar-title>
+        <v-spacer />
+        <v-toolbar-items>
+          <v-btn v-if="selected" @click="newUser()" flat>{{ selected }}</v-btn>
+        </v-toolbar-items>
       </v-toolbar>
-      <v-dialog v-model="dialog" width="500">
+      <v-dialog v-model="dialog" width="500" persistent>
         <v-card>
           <v-card-title class="headline grey lighten-2" primary-title>
             Enter a user
@@ -41,7 +45,10 @@ export default {
       dialog: true,
       handle: "",
       posts: [],
-      error: ""
+      error: "",
+      selected: "",
+      loading: false,
+      response: undefined
     };
   },
   components: {
@@ -51,11 +58,13 @@ export default {
     search() {
       this.loading = true;
       this.axios
-        .get("/profile/" + this.handle)
+        .post("/profile/" + this.handle)
         .then(response => {
+          this.response = response;
           this.loading = false;
           this.dialog = false;
           this.posts = [];
+          this.selected = this.handle;
           response.data.posts.forEach(e => {
             this.posts.push({
               location: L.latLng(e.latitude, e.longitude),
@@ -69,6 +78,11 @@ export default {
           this.loading = false;
           this.error = reason;
         });
+    },
+    newUser() {
+      this.dialog = true;
+      this.handle = "";
+      this.selected = "";
     }
   }
 };
