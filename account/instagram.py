@@ -15,9 +15,7 @@ def get_address_and_coordinates(query_str):
         return str(location), 181, 181
 
 def load_acc():
-    data = json.load(open(os.path.join(os.path.dirname(__file__), Path("user_info.json"))))
-    return data["username"], data["password"], data["token"]
-
+    return os.environ['username'], os.environ['password'], os.environ['token']
 login, pw, token = load_acc()
 
 def get_config(user, directory):
