@@ -1,6 +1,6 @@
 from account import Account, load_all
 
-from flask import Flask
+from flask import Flask, send_from_directory, render_template
 from flask_restful import Api, Resource, reqparse
 
 app = Flask(__name__)
@@ -38,6 +38,12 @@ class Profile(Resource):
             return accounts[handle].to_json(), 201
         else:
             return "Account not found", 404
+
+@app.route('/<path:filename>')
+def serve(filename):
+    if filename == "":
+        return send_from_directory("./dist", "index.html")
+    return send_from_directory("./dist", filename)
 
 api.add_resource(Profile, "/profile/<string:handle>")
 app.run(debug=True)
