@@ -17,7 +17,7 @@
             <v-alert :value="error" type="error">
               {{ error }}
             </v-alert>
-            <v-form @submit="submit" onSubmit="return false;">
+            <v-form @submit="search()">
               <v-text-field label="Instagram Handle" v-model="handle" />
             </v-form>
           </v-card-text>
@@ -29,7 +29,7 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <Map v-if="!dialog" :posts="posts" :line="line"></Map>
+      <Map v-if="!dialog" :posts="posts"></Map>
     </v-app>
   </div>
 </template>
@@ -45,7 +45,6 @@ export default {
       dialog: true,
       handle: "",
       posts: [],
-      line: [],
       error: "",
       selected: "",
       loading: false,
@@ -71,10 +70,8 @@ export default {
               location: L.latLng(e.latitude, e.longitude),
               comment: e.text,
               img: e.img_url,
-              id: e.id,
-              date: e.date
+              id: e.id
             });
-            this.line.push(L.latLng(e.latitude, e.longitude));
           });
         })
         .catch(reason => {
